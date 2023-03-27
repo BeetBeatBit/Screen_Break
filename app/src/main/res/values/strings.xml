@@ -10,4 +10,13 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Ayuda</string>
     <string name="menu_slideshow">Acerca de</string>
+
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</string>
+
+    <string name="Nav_Ayuda">Ayuda</string>
+    <string name="Ayuda_text1">¿Adicción al teléfono?</string>
+    <string name="Ayuda_text2">Como mejorar tus hábitos</string>
+    <string name="Ayuda_text3">Elije las apps que te ayudan a producir</string>
+    <string name="Ayuda_text4">Como mantener la calma</string>
+    <string name="Ayuda_text5">Como afecta una pantalla al dormir</string>
 </resources>
