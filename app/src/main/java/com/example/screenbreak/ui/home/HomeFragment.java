@@ -1,6 +1,7 @@
 package com.example.screenbreak.ui.home;
 
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -11,8 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
+import com.example.screenbreak.UnlockReceiver;
 import com.example.screenbreak.databinding.FragmentHomeBinding;
 
 //Graficas
@@ -29,9 +30,6 @@ import android.graphics.Color;
 //Stats
 import android.Manifest;
 import android.app.usage.UsageStatsManager;
-import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import android.widget.TextView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -46,13 +44,28 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private PieChart mPieChart;
 
+    private UnlockReceiver unlockReceiver;
+    private TextView unlockCountTextView;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         final TextView textView = binding.textHome;
+
+        //Codigo del contador
+        // Se crea una instancia del BroadcastReceiver
+        unlockReceiver = new UnlockReceiver();
+
+        // Se registra el BroadcastReceiver
+        IntentFilter filter = new IntentFilter(Intent.ACTION_USER_PRESENT);
+        requireActivity().registerReceiver(unlockReceiver, filter);
+
+        // Se obtiene una referencia al elemento TextView del diseño
+        unlockCountTextView = root.findViewById(R.id.unlock_count_text_view);
+        //
+
 
         // Configurar la gráfica circular
         mPieChart = root.findViewById(R.id.pie_chart);
@@ -117,10 +130,16 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        // Se desregistra el BroadcastReceiver
+        requireActivity().unregisterReceiver(unlockReceiver);
+        //binding = null;
     }
-
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Se actualiza el valor del TextView cada vez que se muestra el fragmento
+        unlockCountTextView.setText("Desbloqueos: " + unlockReceiver.getUnlockCount());
+    }
 
     public long getTotalTimeYesterdayInMinutes(String packageName) {
         UsageStatsManager usageStatsManager = (UsageStatsManager) requireContext().getSystemService(Context.USAGE_STATS_SERVICE);
@@ -137,5 +156,4 @@ public class HomeFragment extends Fragment {
         }
         return -1;
     }
-
 }
