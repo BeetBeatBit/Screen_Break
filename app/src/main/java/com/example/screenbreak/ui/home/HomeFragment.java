@@ -2,6 +2,7 @@ package com.example.screenbreak.ui.home;
 
 
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -66,6 +67,14 @@ public class HomeFragment extends Fragment {
         unlockCountTextView = root.findViewById(R.id.unlock_count_text_view);
         //
 
+        //Codigo Lista de apps
+        List<String> installedApps = getInstalledApps();
+
+        for (String appName : installedApps) {
+            Log.d("Installed App", appName);
+        }
+        //
+
 
         // Configurar la gráfica circular
         mPieChart = root.findViewById(R.id.pie_chart);
@@ -88,12 +97,12 @@ public class HomeFragment extends Fragment {
         String packageName3 = "com.zhiliaoapp.musically";
 
 
-        boolean permissionGranted = packageManager.checkPermission(Manifest.permission.PACKAGE_USAGE_STATS, packageNameThis) == PackageManager.PERMISSION_GRANTED;
+        //boolean permissionGranted = packageManager.checkPermission(Manifest.permission.PACKAGE_USAGE_STATS, packageNameThis) == PackageManager.PERMISSION_GRANTED;
 
-        if (!permissionGranted) {
-            Log.println(Log.INFO, "MainActivity", "Estado del permiso: " + permissionGranted);
-            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-        }
+        //if (!permissionGranted) {
+            //Log.println(Log.INFO, "MainActivity", "Estado del permiso: " + permissionGranted);
+           // startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        //}
 
         float totalTimeWhats = getTotalTimeYesterdayInMinutes(packageName);
         float totalTimeFacebook = getTotalTimeYesterdayInMinutes(packageName2);
@@ -156,4 +165,18 @@ public class HomeFragment extends Fragment {
         }
         return -1;
     }
+
+    public List<String> getInstalledApps() {
+        List<String> installedApps = new ArrayList<>();
+        PackageManager packageManager = getContext().getPackageManager();
+        List<ApplicationInfo> appInfoList = packageManager.getInstalledApplications(0);
+
+        for (ApplicationInfo appInfo : appInfoList) {
+            installedApps.add(appInfo.packageName);
+        }
+
+        return installedApps;
+    }
+
+
 }
