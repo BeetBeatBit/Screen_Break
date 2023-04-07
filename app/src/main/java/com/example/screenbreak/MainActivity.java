@@ -1,6 +1,10 @@
 package com.example.screenbreak;
 
 import android.Manifest;
+import android.net.Uri;
+import android.os.Process;
+import android.app.AppOpsManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -9,10 +13,12 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
@@ -29,16 +35,29 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-    private static final int PERMISSION_REQUEST_CODE = 123;
+    private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+
         setContentView(binding.getRoot());
+
+        //Verificacion de permiso USAGE_STATS
+        if (!checkUsageStatsPermission()){
+            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        }
+
+        //Verificacion de permiso PHONE_STATE
+        boolean variable1 = checkPhoneStatePermission();
+        Log.println(Log.INFO, "MainActivity", "Estado del permiso PHONE_STATE: " + variable1);
+        if (!checkPhoneStatePermission()){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
+        }
 
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
@@ -60,19 +79,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        // Verificar si se tienen los permisos necesarios
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.PACKAGE_USAGE_STATS);
-            Log.println(Log.INFO, "MainActivity", "Estado del permiso: " + permissionCheck);
-            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                // El permiso ya ha sido otorgado, hacer algo
-            } else {
-                // El permiso no ha sido otorgado, solicitar permiso
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS}, PERMISSION_REQUEST_CODE);
-            }
-        }
     }
 
+    //Dibuja menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -80,10 +89,35 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Dibuja content main
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    //Verifica el permiso USAGE_STATS
+    private boolean checkUsageStatsPermission() {
+        AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+        int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), getPackageName());
+
+        return mode == AppOpsManager.MODE_ALLOWED;
+    }
+
+    private boolean checkPhoneStatePermission() {
+        /*
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+                == PackageManager.PERMISSION_GRANTED) {
+            // Permission is granted
+            return true;
+        } else {
+            // Permission is not granted
+            return false;
+        }*/
+        AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+        int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_READ_PHONE_STATE, Process.myUid(), getPackageName());
+        return mode == AppOpsManager.MODE_ALLOWED;
+    }
+
 }

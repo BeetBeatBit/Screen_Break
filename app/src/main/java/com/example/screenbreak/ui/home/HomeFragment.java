@@ -67,13 +67,43 @@ public class HomeFragment extends Fragment {
         unlockCountTextView = root.findViewById(R.id.unlock_count_text_view);
         //
 
-        //Codigo Lista de apps
-        List<String> installedApps = getInstalledApps();
 
+
+        //Codigo Lista de apps
+        /*
+        List<String> installedApps = getInstalledApps();
         for (String appName : installedApps) {
-            Log.d("Installed App", appName);
+            if (appName.equals("com.whatsapp")){
+                Log.d("APP", appName);
+            }else {
+                String notMatch = "NOT MATCH";
+                Log.d("NOT MATCH", notMatch);
+            }
+        }*/
+
+        List<ApplicationInfo> installedApps = getInstalledApps2();
+        for (ApplicationInfo appInfo : installedApps) {
+            //Log.d("InstalledApp", "App name: " + appInfo.loadLabel(packageManager));
+            Log.d("InstalledApp", "Package name: " + appInfo.packageName);
         }
+
         //
+
+
+        //Medir uso
+
+        String packageName = "com.whatsapp";
+        String packageName2 = "com.facebook.katana";
+        String packageName3 = "com.zhiliaoapp.musically";
+
+        float totalTimeWhats = getTotalTimeYesterdayInMinutes(packageName);
+        float totalTimeFacebook = getTotalTimeYesterdayInMinutes(packageName2);
+        float totalTimeTikTok = getTotalTimeYesterdayInMinutes(packageName3);
+
+        System.out.println("WhatsApp usage: "+totalTimeWhats);
+        System.out.println("Facebook usage: "+totalTimeFacebook);
+        System.out.println("TikTok usage: "+totalTimeTikTok);
+
 
 
         // Configurar la gráfica circular
@@ -86,31 +116,6 @@ public class HomeFragment extends Fragment {
         mPieChart.setHoleColor(Color.WHITE);
         mPieChart.setTransparentCircleRadius(61f);
         mPieChart.setHoleRadius(58f);
-
-
-        //Medir uso
-        PackageManager packageManager = requireContext().getPackageManager();
-        String packageNameThis = "com.example.screenbreak";
-
-        String packageName = "com.whatsapp";
-        String packageName2 = "com.facebook.katana";
-        String packageName3 = "com.zhiliaoapp.musically";
-
-
-        //boolean permissionGranted = packageManager.checkPermission(Manifest.permission.PACKAGE_USAGE_STATS, packageNameThis) == PackageManager.PERMISSION_GRANTED;
-
-        //if (!permissionGranted) {
-            //Log.println(Log.INFO, "MainActivity", "Estado del permiso: " + permissionGranted);
-           // startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-        //}
-
-        float totalTimeWhats = getTotalTimeYesterdayInMinutes(packageName);
-        float totalTimeFacebook = getTotalTimeYesterdayInMinutes(packageName2);
-        float totalTimeTikTok = getTotalTimeYesterdayInMinutes(packageName3);
-
-        System.out.println("WhatsApp usage: "+totalTimeWhats);
-        System.out.println("Facebook usage: "+totalTimeFacebook);
-        System.out.println("TikTok usage: "+totalTimeTikTok);
 
         // Crear una lista de datos para la gráfica circular y configurar su contenido
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
@@ -177,6 +182,21 @@ public class HomeFragment extends Fragment {
 
         return installedApps;
     }
+
+    public List<ApplicationInfo> getInstalledApps2() {
+        PackageManager packageManager = getContext().getPackageManager();
+        List<ApplicationInfo> installedApps = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        List<ApplicationInfo> userInstalledApps = new ArrayList<>();
+        for (ApplicationInfo appInfo : installedApps) {
+            // Filter out system apps
+            if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                userInstalledApps.add(appInfo);
+            }
+        }
+        return userInstalledApps;
+    }
+
 
 
 }
