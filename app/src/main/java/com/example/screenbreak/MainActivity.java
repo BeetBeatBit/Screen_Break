@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
         }
 
+        boolean variable2 = checkQueryPermissions();
+        Log.println(Log.INFO, "MainActivity", "Estado del permiso QUERY: " + variable2);
+
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //Dibuja menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -89,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    //Dibuja content main
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -97,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    //Verifica el permiso USAGE_STATS
     private boolean checkUsageStatsPermission() {
+
         AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
         int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), getPackageName());
 
@@ -106,18 +107,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkPhoneStatePermission() {
-        /*
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-                == PackageManager.PERMISSION_GRANTED) {
-            // Permission is granted
-            return true;
-        } else {
-            // Permission is not granted
-            return false;
-        }*/
+
         AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
         int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_READ_PHONE_STATE, Process.myUid(), getPackageName());
+
         return mode == AppOpsManager.MODE_ALLOWED;
     }
 
+    private boolean checkQueryPermissions() {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.QUERY_ALL_PACKAGES) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

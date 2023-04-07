@@ -55,7 +55,9 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
         final TextView textView = binding.textHome;
 
-        //Codigo del contador
+
+        //Codigo del contador--------------------
+
         // Se crea una instancia del BroadcastReceiver
         unlockReceiver = new UnlockReceiver();
 
@@ -65,29 +67,10 @@ public class HomeFragment extends Fragment {
 
         // Se obtiene una referencia al elemento TextView del diseño
         unlockCountTextView = root.findViewById(R.id.unlock_count_text_view);
-        //
+        //------------------------------------------
 
 
-
-        //Codigo Lista de apps
-        /*
-        List<String> installedApps = getInstalledApps();
-        for (String appName : installedApps) {
-            if (appName.equals("com.whatsapp")){
-                Log.d("APP", appName);
-            }else {
-                String notMatch = "NOT MATCH";
-                Log.d("NOT MATCH", notMatch);
-            }
-        }*/
-
-        List<ApplicationInfo> installedApps = getInstalledApps2();
-        for (ApplicationInfo appInfo : installedApps) {
-            //Log.d("InstalledApp", "App name: " + appInfo.loadLabel(packageManager));
-            Log.d("InstalledApp", "Package name: " + appInfo.packageName);
-        }
-
-        //
+         getInstalledApps(); //La funcion retorna una lista con las apps del usuario
 
 
         //Medir uso
@@ -100,10 +83,9 @@ public class HomeFragment extends Fragment {
         float totalTimeFacebook = getTotalTimeYesterdayInMinutes(packageName2);
         float totalTimeTikTok = getTotalTimeYesterdayInMinutes(packageName3);
 
-        System.out.println("WhatsApp usage: "+totalTimeWhats);
-        System.out.println("Facebook usage: "+totalTimeFacebook);
-        System.out.println("TikTok usage: "+totalTimeTikTok);
-
+        //System.out.println("WhatsApp usage: "+totalTimeWhats);
+        //System.out.println("Facebook usage: "+totalTimeFacebook);
+        //System.out.println("TikTok usage: "+totalTimeTikTok);
 
 
         // Configurar la gráfica circular
@@ -171,32 +153,23 @@ public class HomeFragment extends Fragment {
         return -1;
     }
 
-    public List<String> getInstalledApps() {
-        List<String> installedApps = new ArrayList<>();
-        PackageManager packageManager = getContext().getPackageManager();
-        List<ApplicationInfo> appInfoList = packageManager.getInstalledApplications(0);
-
-        for (ApplicationInfo appInfo : appInfoList) {
-            installedApps.add(appInfo.packageName);
-        }
-
-        return installedApps;
-    }
-
-    public List<ApplicationInfo> getInstalledApps2() {
+    public List<ApplicationInfo> getInstalledApps() {
         PackageManager packageManager = getContext().getPackageManager();
         List<ApplicationInfo> installedApps = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-
         List<ApplicationInfo> userInstalledApps = new ArrayList<>();
+
         for (ApplicationInfo appInfo : installedApps) {
             // Filter out system apps
             if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                 userInstalledApps.add(appInfo);
             }
         }
+        for (ApplicationInfo appInfo : userInstalledApps) {
+            Log.d("InstalledApp", "Package name: " + appInfo.packageName);
+        }
+
         return userInstalledApps;
     }
-
 
 
 }
