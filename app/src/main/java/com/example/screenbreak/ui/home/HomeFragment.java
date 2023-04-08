@@ -29,16 +29,19 @@ import com.example.screenbreak.R;
 import android.graphics.Color;
 
 //Stats
-import android.Manifest;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
-import android.provider.Settings;
 import android.app.usage.UsageStats;
 import android.util.Log;
+
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
 
@@ -72,22 +75,14 @@ public class HomeFragment extends Fragment {
 
          getInstalledApps(); //La funcion retorna una lista con las apps del usuario
 
-
-        //Medir uso
-
-        String packageName = "com.whatsapp";
-        String packageName2 = "com.facebook.katana";
-        String packageName3 = "com.zhiliaoapp.musically";
-
-        float totalTimeWhats = getTotalTimeYesterdayInMinutes(packageName);
-        float totalTimeFacebook = getTotalTimeYesterdayInMinutes(packageName2);
-        float totalTimeTikTok = getTotalTimeYesterdayInMinutes(packageName3);
-
-        //System.out.println("WhatsApp usage: "+totalTimeWhats);
-        //System.out.println("Facebook usage: "+totalTimeFacebook);
-        //System.out.println("TikTok usage: "+totalTimeTikTok);
+        List<String> appUsageTimeList = getTotalTimeYesterdayInMinutes(getInstalledApps()); //La funcion retorna una lista con las apps del usuario y su tiempo ordenadas descendente
+        for (String appUsageTime : appUsageTimeList) {
+            Log.d("MiApp", appUsageTime);
+        }
 
 
+
+        //NO TOCAR CODIGO AQUI ABAJO
         // Configurar la gráfica circular
         mPieChart = root.findViewById(R.id.pie_chart);
         mPieChart.setUsePercentValues(false);
@@ -101,9 +96,9 @@ public class HomeFragment extends Fragment {
 
         // Crear una lista de datos para la gráfica circular y configurar su contenido
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry(totalTimeWhats, "WhatsApp"));
-        pieEntries.add(new PieEntry(totalTimeFacebook, "Facebook"));
-        pieEntries.add(new PieEntry(totalTimeTikTok, "TikTok"));
+        //pieEntries.add(new PieEntry(totalTimeWhats, "WhatsApp"));
+        //pieEntries.add(new PieEntry(totalTimeFacebook, "Facebook"));
+        //pieEntries.add(new PieEntry(totalTimeTikTok, "TikTok"));
 
         // Crear un conjunto de datos para la gráfica circular y configurar sus propiedades
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "Apps mas usadas");
@@ -137,7 +132,7 @@ public class HomeFragment extends Fragment {
         unlockCountTextView.setText("Desbloqueos: " + unlockReceiver.getUnlockCount());
     }
 
-    public long getTotalTimeYesterdayInMinutes(String packageName) {
+    public List<String> getTotalTimeYesterdayInMinutes(List<ApplicationInfo> userInstalledApps) {
         UsageStatsManager usageStatsManager = (UsageStatsManager) requireContext().getSystemService(Context.USAGE_STATS_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
@@ -145,13 +140,46 @@ public class HomeFragment extends Fragment {
         calendar.add(Calendar.DATE, -1);
         long startTime = calendar.getTimeInMillis();
         List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
+
+        Map<String, Long> appUsageTimeMap = new HashMap<>();
         for (UsageStats usageStats : usageStatsList) {
-            if (usageStats.getPackageName().equals(packageName)) {
-                return usageStats.getTotalTimeInForeground() / 1000 / 60;
+            String packageName = usageStats.getPackageName();
+            if (isUserInstalledApp(packageName, userInstalledApps)) {
+                long timeInForeground = usageStats.getTotalTimeInForeground() / 1000 / 60;
+                if (timeInForeground > 0) {
+                    appUsageTimeMap.put(getAppName(packageName), timeInForeground);
+                }
             }
         }
-        return -1;
+
+        List<String> sortedAppUsageTimeList = new ArrayList<>(appUsageTimeMap.entrySet())
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                //.map(entry -> entry.getKey() + " - " + entry.getValue() + " minutes")
+                .map(entry -> entry.getKey() + " - " + entry.getValue())
+                .collect(Collectors.toList());
+
+        return sortedAppUsageTimeList;
     }
+
+    private boolean isUserInstalledApp(String packageName, List<ApplicationInfo> userInstalledApps) {
+        for (ApplicationInfo appInfo : userInstalledApps) {
+            if (packageName.equals(appInfo.packageName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String getAppName(String packageName) {
+        PackageManager packageManager = requireContext().getPackageManager();
+        try {
+            return packageManager.getApplicationLabel(packageManager.getApplicationInfo(packageName, 0)).toString();
+        } catch (PackageManager.NameNotFoundException e) {
+            return packageName;
+        }
+    }
+
 
     public List<ApplicationInfo> getInstalledApps() {
         PackageManager packageManager = getContext().getPackageManager();
@@ -164,9 +192,10 @@ public class HomeFragment extends Fragment {
                 userInstalledApps.add(appInfo);
             }
         }
+        /*
         for (ApplicationInfo appInfo : userInstalledApps) {
             Log.d("InstalledApp", "Package name: " + appInfo.packageName);
-        }
+        }*/
 
         return userInstalledApps;
     }
