@@ -37,10 +37,12 @@ import android.icu.util.Calendar;
 import android.app.usage.UsageStats;
 import android.util.Log;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
@@ -73,15 +75,6 @@ public class HomeFragment extends Fragment {
         //------------------------------------------
 
 
-         getInstalledApps(); //La funcion retorna una lista con las apps del usuario
-
-        List<String> appUsageTimeList = getTotalTimeYesterdayInMinutes(getInstalledApps()); //La funcion retorna una lista con las apps del usuario y su tiempo ordenadas descendente
-        for (String appUsageTime : appUsageTimeList) {
-            Log.d("MiApp", appUsageTime);
-        }
-
-
-
         //NO TOCAR CODIGO AQUI ABAJO
         // Configurar la gráfica circular
         mPieChart = root.findViewById(R.id.pie_chart);
@@ -89,20 +82,53 @@ public class HomeFragment extends Fragment {
         mPieChart.getDescription().setEnabled(false);
         mPieChart.setExtraOffsets(5, 10, 5, 5);
         mPieChart.setDragDecelerationFrictionCoef(0.95f);
-        mPieChart.setDrawHoleEnabled(true);
-        mPieChart.setHoleColor(Color.WHITE);
+        mPieChart.setDrawHoleEnabled(false);
+        //mPieChart.setHoleColor(Color.WHITE);
         mPieChart.setTransparentCircleRadius(61f);
         mPieChart.setHoleRadius(58f);
+        mPieChart.setMinimumWidth(1000);
 
-        // Crear una lista de datos para la gráfica circular y configurar su contenido
+
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
-        //pieEntries.add(new PieEntry(totalTimeWhats, "WhatsApp"));
-        //pieEntries.add(new PieEntry(totalTimeFacebook, "Facebook"));
-        //pieEntries.add(new PieEntry(totalTimeTikTok, "TikTok"));
+
+        List<PieEntry> appUsageTimeList = getTotalTimeYesterdayInMinutes(getInstalledApps()); //La funcion retorna una lista con las apps del usuario
+        int count = 0;
+        for (PieEntry entry : appUsageTimeList) {
+            float totalTime = entry.getValue();
+            String appName = entry.getLabel();
+
+            Log.d("MiApp", Float.toString(totalTime));
+            Log.d("MiApp", appName);
+
+            pieEntries.add(new PieEntry(totalTime, appName));
+
+            count++;
+            if (count >= 5) {
+                break; // Detiene el bucle después de imprimir los primeros 4 pares de valores
+            }
+        }
+
 
         // Crear un conjunto de datos para la gráfica circular y configurar sus propiedades
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Apps mas usadas");
-        pieDataSet.setColors(new int[] { ContextCompat.getColor(requireContext(), R.color.color1), ContextCompat.getColor(requireContext(), R.color.color2), ContextCompat.getColor(requireContext(), R.color.color3) });
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Top Apps");
+
+        //Colores
+
+        // Obtener el número de entradas en el conjunto de datos
+        int numEntries = pieDataSet.getEntryCount();
+        // Crear un array de colores aleatorios con la misma longitud que el número de entradas
+        int[] randomColors = new int[numEntries];
+        // Generar colores aleatorios RGB para cada entrada y agregarlos al array
+        Random random = new Random();
+        for (int i = 0; i < numEntries; i++) {
+            randomColors[i] = Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+        }
+        // Establecer los colores aleatorios en el conjunto de datos de la gráfica
+        pieDataSet.setColors(randomColors);
+        //pieDataSet.setColors(new int[] { ContextCompat.getColor(requireContext(), R.color.color1), ContextCompat.getColor(requireContext(), R.color.color2), ContextCompat.getColor(requireContext(), R.color.color3) });
+
+
+
 
         // Crear un objeto de tipo PieData y configurar su contenido y propiedades
         PieData pieData = new PieData(pieDataSet);
@@ -111,7 +137,7 @@ public class HomeFragment extends Fragment {
 
         // Asignar el objeto data a la vista de la gráfica circular y actualizar la vista
         mPieChart.setData(pieData);
-        mPieChart.animateY(1000);
+        mPieChart.animateY(1500);
         mPieChart.invalidate();
 
         return root;
@@ -132,7 +158,9 @@ public class HomeFragment extends Fragment {
         unlockCountTextView.setText("Desbloqueos: " + unlockReceiver.getUnlockCount());
     }
 
-    public List<String> getTotalTimeYesterdayInMinutes(List<ApplicationInfo> userInstalledApps) {
+    public List<PieEntry> getTotalTimeYesterdayInMinutes(List<ApplicationInfo> userInstalledApps) {
+        /*
+        //ayer
         UsageStatsManager usageStatsManager = (UsageStatsManager) requireContext().getSystemService(Context.USAGE_STATS_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
@@ -140,6 +168,23 @@ public class HomeFragment extends Fragment {
         calendar.add(Calendar.DATE, -1);
         long startTime = calendar.getTimeInMillis();
         List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
+        */
+
+        //hoy
+        UsageStatsManager usageStatsManager = (UsageStatsManager) requireContext().getSystemService(Context.USAGE_STATS_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        long endTime = calendar.getTimeInMillis();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        long startTime = calendar.getTimeInMillis();
+
+
+        Log.d("TAG", "StartTime: " + startTime);
+        Log.d("TAG", "endTime: " + endTime);
+
+        List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
+
 
         Map<String, Long> appUsageTimeMap = new HashMap<>();
         for (UsageStats usageStats : usageStatsList) {
@@ -152,14 +197,25 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        List<String> sortedAppUsageTimeList = new ArrayList<>(appUsageTimeMap.entrySet())
-                .stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                //.map(entry -> entry.getKey() + " - " + entry.getValue() + " minutes")
-                .map(entry -> entry.getKey() + " - " + entry.getValue())
-                .collect(Collectors.toList());
+        List<PieEntry> pieEntries = new ArrayList<>();
 
-        return sortedAppUsageTimeList;
+        for (Map.Entry<String, Long> entry : appUsageTimeMap.entrySet()) {
+            int totalTime = entry.getValue().intValue();
+            String appName = entry.getKey();
+            pieEntries.add(new PieEntry(totalTime, appName));
+        }
+
+        // Ordenar la lista de PieEntry en orden descendente según totalTime
+        Collections.sort(pieEntries, new Comparator<PieEntry>() {
+            @Override
+            public int compare(PieEntry e1, PieEntry e2) {
+                int value1 = (int) (Float.floatToIntBits(e1.getValue()) >> 23);
+                int value2 = (int) (Float.floatToIntBits(e2.getValue()) >> 23);
+                return Integer.compare(value2, value1);
+            }
+        });
+
+        return pieEntries;
     }
 
     private boolean isUserInstalledApp(String packageName, List<ApplicationInfo> userInstalledApps) {

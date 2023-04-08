@@ -9,10 +9,10 @@
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pie_chart"
-        android:layout_width="378dp"
-        android:layout_height="249dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="68dp"
+        android:layout_width="441dp"
+        android:layout_height="323dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="52dp"
         app:layout_constraintBottom_toTopOf="@+id/text_home"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -43,8 +43,8 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginStart="188dp"
+        android:layout_marginBottom="52dp"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/pie_chart"
         app:layout_constraintStart_toStartOf="parent" />

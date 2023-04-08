@@ -11,5 +11,5 @@
     <color name="color1">#2ED610</color>
     <color name="color2">#274CD1</color>
     <color name="color3">#FF000000</color>
-    <color name="colorPrimaryDark">#FF5722</color>
+    <color name="colorPrimaryDark">#000000</color>
 </resources>
