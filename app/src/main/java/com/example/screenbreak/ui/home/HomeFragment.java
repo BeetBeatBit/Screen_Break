@@ -52,30 +52,23 @@ public class HomeFragment extends Fragment {
 
     private UnlockReceiver unlockReceiver;
     private TextView unlockCountTextView;
+    private TextView textViewTotalPhoneTime;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        final TextView textView = binding.textHome;
+        //final TextView textView = binding.textHome;
 
 
-        //Codigo del contador--------------------
-
-        // Se crea una instancia del BroadcastReceiver
+        //Codigo del contador----------------------
         unlockReceiver = new UnlockReceiver();
-
-        // Se registra el BroadcastReceiver
         IntentFilter filter = new IntentFilter(Intent.ACTION_USER_PRESENT);
         requireActivity().registerReceiver(unlockReceiver, filter);
-
-        // Se obtiene una referencia al elemento TextView del diseño
         unlockCountTextView = root.findViewById(R.id.unlock_count_text_view);
         //------------------------------------------
 
-
-        //NO TOCAR CODIGO AQUI ABAJO
         // Configurar la gráfica circular
         mPieChart = root.findViewById(R.id.pie_chart);
         mPieChart.setUsePercentValues(false);
@@ -88,47 +81,43 @@ public class HomeFragment extends Fragment {
         mPieChart.setHoleRadius(58f);
         mPieChart.setMinimumWidth(1000);
 
-
+        //Obtener apps y tiempos
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        List<PieEntry> appUsageTimeList = getTotalTimeYesterdayInMinutes(getInstalledApps());
 
-        List<PieEntry> appUsageTimeList = getTotalTimeYesterdayInMinutes(getInstalledApps()); //La funcion retorna una lista con las apps del usuario
         int count = 0;
+        float totalPhoneTime = 0;
         for (PieEntry entry : appUsageTimeList) {
             float totalTime = entry.getValue();
             String appName = entry.getLabel();
-
-            Log.d("MiApp", Float.toString(totalTime));
-            Log.d("MiApp", appName);
-
+            totalPhoneTime = totalPhoneTime + totalTime;
+            //Log.d("MiApp", Float.toString(totalTime));
+            //Log.d("MiApp", appName);
             pieEntries.add(new PieEntry(totalTime, appName));
 
             count++;
             if (count >= 5) {
-                break; // Detiene el bucle después de imprimir los primeros 4 pares de valores
+                break;
             }
         }
 
+        Log.d("Total time", Float.toString(totalPhoneTime));
+
+        textViewTotalPhoneTime = root.findViewById(R.id.textViewTotalPhoneTime);
+        textViewTotalPhoneTime.setText("Tiempo total: "+ totalPhoneTime + " min.");
 
         // Crear un conjunto de datos para la gráfica circular y configurar sus propiedades
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Top Apps");
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Top 5 Apps");
 
-        //Colores
-
-        // Obtener el número de entradas en el conjunto de datos
+        //Colores de la gráfica
         int numEntries = pieDataSet.getEntryCount();
-        // Crear un array de colores aleatorios con la misma longitud que el número de entradas
         int[] randomColors = new int[numEntries];
-        // Generar colores aleatorios RGB para cada entrada y agregarlos al array
         Random random = new Random();
         for (int i = 0; i < numEntries; i++) {
             randomColors[i] = Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
         }
-        // Establecer los colores aleatorios en el conjunto de datos de la gráfica
         pieDataSet.setColors(randomColors);
         //pieDataSet.setColors(new int[] { ContextCompat.getColor(requireContext(), R.color.color1), ContextCompat.getColor(requireContext(), R.color.color2), ContextCompat.getColor(requireContext(), R.color.color3) });
-
-
-
 
         // Crear un objeto de tipo PieData y configurar su contenido y propiedades
         PieData pieData = new PieData(pieDataSet);
@@ -141,7 +130,6 @@ public class HomeFragment extends Fragment {
         mPieChart.invalidate();
 
         return root;
-
     }
 
     @Override
@@ -149,7 +137,6 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         // Se desregistra el BroadcastReceiver
         requireActivity().unregisterReceiver(unlockReceiver);
-        //binding = null;
     }
     @Override
     public void onResume() {
@@ -179,12 +166,7 @@ public class HomeFragment extends Fragment {
         calendar.set(Calendar.SECOND, 0);
         long startTime = calendar.getTimeInMillis();
 
-
-        Log.d("TAG", "StartTime: " + startTime);
-        Log.d("TAG", "endTime: " + endTime);
-
         List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
-
 
         Map<String, Long> appUsageTimeMap = new HashMap<>();
         for (UsageStats usageStats : usageStatsList) {
