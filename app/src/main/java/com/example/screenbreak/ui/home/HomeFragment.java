@@ -93,7 +93,10 @@ public class HomeFragment extends Fragment {
             totalPhoneTime = totalPhoneTime + totalTime;
             //Log.d("MiApp", Float.toString(totalTime));
             //Log.d("MiApp", appName);
-            pieEntries.add(new PieEntry(totalTime, appName));
+
+            int appMin = (int) totalPhoneTime;
+
+            pieEntries.add(new PieEntry(appMin, appName));
 
             count++;
             if (count >= 5) {
@@ -101,10 +104,17 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        Log.d("Total time", Float.toString(totalPhoneTime));
-
+        //Tiempo total de uso
         textViewTotalPhoneTime = root.findViewById(R.id.textViewTotalPhoneTime);
-        textViewTotalPhoneTime.setText("Tiempo total: "+ totalPhoneTime + " min.");
+        if (totalPhoneTime <= 60) {
+            textViewTotalPhoneTime.setText("Tiempo total: "+ totalPhoneTime + " min.");
+        }else {
+            // calcular horas y minutos
+            int hours = (int) totalPhoneTime / 60;
+            int minutes = (int) totalPhoneTime % 60;
+            textViewTotalPhoneTime.setText("Tiempo total: "+ hours + " hrs " + minutes + " min.");
+        }
+
 
         // Crear un conjunto de datos para la gráfica circular y configurar sus propiedades
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "Top 5 Apps");
