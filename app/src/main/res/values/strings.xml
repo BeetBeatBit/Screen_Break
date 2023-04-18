@@ -8,10 +8,12 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
+    <string name="menu_detalle">Detalle</string>
     <string name="menu_gallery">Ayuda</string>
     <string name="menu_slideshow">Acerca de</string>
 
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</string>
+    <string name="Text_Time">Su tiempo del uso total hoy es:</string>
 
     <string name="Nav_Ayuda">Ayuda</string>
     <string name="Ayuda_text1">¿Adicción al teléfono?</string>

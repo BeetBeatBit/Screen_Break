@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
         //final TextView textView = binding.textHome;
 
 
-        //Codigo del contador----------------------
+        //Codigo del contador-----------------------
         unlockReceiver = new UnlockReceiver();
         IntentFilter filter = new IntentFilter(Intent.ACTION_USER_PRESENT);
         requireActivity().registerReceiver(unlockReceiver, filter);
@@ -107,12 +107,12 @@ public class HomeFragment extends Fragment {
         //Tiempo total de uso
         textViewTotalPhoneTime = root.findViewById(R.id.textViewTotalPhoneTime);
         if (totalPhoneTime <= 60) {
-            textViewTotalPhoneTime.setText("Tiempo total: "+ totalPhoneTime + " min.");
+            textViewTotalPhoneTime.setText( totalPhoneTime + " min.");
         }else {
             // calcular horas y minutos
             int hours = (int) totalPhoneTime / 60;
             int minutes = (int) totalPhoneTime % 60;
-            textViewTotalPhoneTime.setText("Tiempo total: "+ hours + " hrs " + minutes + " min.");
+            textViewTotalPhoneTime.setText( hours + " hrs " + minutes + " min.");
         }
 
 
@@ -152,7 +152,7 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // Se actualiza el valor del TextView cada vez que se muestra el fragmento
-        unlockCountTextView.setText("Desbloqueos: " + unlockReceiver.getUnlockCount());
+        unlockCountTextView.setText("Hoy has desbloqueado " + unlockReceiver.getUnlockCount() + " Veces tu telefono");
     }
 
     public List<PieEntry> getTotalTimeYesterdayInMinutes(List<ApplicationInfo> userInstalledApps) {
