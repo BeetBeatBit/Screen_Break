@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
             String appName = entry.getLabel();
             totalPhoneTime = totalPhoneTime + totalTime;
             //Log.d("MiApp", Float.toString(totalTime));
-            Log.d("MiApp", appName);
+            //Log.d("MiApp", appName);
 
             int appMin = (int) totalPhoneTime;
 
@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
 
             count++;
             if (count >= 5) {
-                //break;
+                break;
             }
         }
 
@@ -137,7 +137,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // Crea un nuevo adaptador y lo asigna al RecyclerView
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(appUsageTimeList);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(pieEntries);
         recyclerView.setAdapter(adapter);
 /*
         // Configurar el RecyclerView con el adaptador
