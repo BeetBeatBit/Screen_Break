@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.screenbreak.UnlockReceiver;
 import com.example.screenbreak.databinding.FragmentHomeBinding;
@@ -85,6 +87,8 @@ public class HomeFragment extends Fragment {
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
         List<PieEntry> appUsageTimeList = getTotalTimeYesterdayInMinutes(getInstalledApps());
 
+
+
         int count = 0;
         float totalPhoneTime = 0;
         for (PieEntry entry : appUsageTimeList) {
@@ -92,7 +96,7 @@ public class HomeFragment extends Fragment {
             String appName = entry.getLabel();
             totalPhoneTime = totalPhoneTime + totalTime;
             //Log.d("MiApp", Float.toString(totalTime));
-            //Log.d("MiApp", appName);
+            Log.d("MiApp", appName);
 
             int appMin = (int) totalPhoneTime;
 
@@ -100,7 +104,7 @@ public class HomeFragment extends Fragment {
 
             count++;
             if (count >= 5) {
-                break;
+                //break;
             }
         }
 
@@ -119,6 +123,30 @@ public class HomeFragment extends Fragment {
         // Crear un conjunto de datos para la gráfica circular y configurar sus propiedades
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "Top 5 Apps");
 
+
+        // Crear un RecyclerView y un RecyclerViewAdapter
+        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        // Define el espacio vertical entre elementos
+        int verticalSpaceHeight = getResources().getDimensionPixelSize(R.dimen.recycler_view_vertical_space);
+        recyclerView.addItemDecoration(new RecyclerViewAdapter.VerticalSpaceItemDecoration(verticalSpaceHeight));
+
+        // Crea un nuevo LinearLayoutManager y lo asigna al RecyclerView
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Crea un nuevo adaptador y lo asigna al RecyclerView
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(appUsageTimeList);
+        recyclerView.setAdapter(adapter);
+/*
+        // Configurar el RecyclerView con el adaptador
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+
+        int verticalSpaceHeight = getResources().getDimensionPixelSize(R.dimen.vertical_space);
+        recyclerView.addItemDecoration(new RecyclerViewAdapter.VerticalSpaceItemDecoration(verticalSpaceHeight));
+*/
         //Colores de la gráfica
         int numEntries = pieDataSet.getEntryCount();
         int[] randomColors = new int[numEntries];
