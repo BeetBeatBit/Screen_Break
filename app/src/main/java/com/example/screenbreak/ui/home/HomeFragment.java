@@ -136,7 +136,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // Crea un nuevo adaptador y lo asigna al RecyclerView
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(pieEntries);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(),pieEntries);
         recyclerView.setAdapter(adapter);
 /*
         // Configurar el RecyclerView con el adaptador

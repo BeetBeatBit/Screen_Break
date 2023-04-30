@@ -1,7 +1,10 @@
 package com.example.screenbreak.ui.home;
 
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +22,12 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private List<PieEntry> pieEntries;
+    private Context mContext;
 
-    public RecyclerViewAdapter(List<PieEntry> pieEntries) {
+    public RecyclerViewAdapter(Context context,List<PieEntry> pieEntries) {
 
         this.pieEntries = pieEntries;
+        this.mContext = context;
     }
 
     @NonNull
@@ -38,6 +43,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.textViewAppName.setText(entry.getLabel());
         Log.d("PRUEBA DE NOMBREE", entry.getLabel());
 
+        String packageName = getPackageName(entry.getLabel());
+        Log.d("PRUEBA DEFINITIVA: ", packageName);
+
+
         int totalTime = (int) entry.getValue();
         if (totalTime <= 60) {
             holder.textViewAppTime.setText(totalTime + " min.");
@@ -52,6 +61,34 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public int getItemCount() {
         return pieEntries.size();
     }
+
+    public Drawable getAppIconByPackageName(String packageName) {
+        //PackageManager pm = getPackageManager();
+        PackageManager pm = mContext.getPackageManager();
+        try {
+            ApplicationInfo appInfo = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+            return pm.getApplicationIcon(appInfo);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String getPackageName(String appName) {
+        PackageManager packageManager = mContext.getPackageManager();
+
+        List<ApplicationInfo> appList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+        for (ApplicationInfo appInfo : appList) {
+            String packageName = appInfo.packageName;
+            String name = appInfo.loadLabel(packageManager).toString();
+            if (name.equals(appName)) {
+                return packageName;
+            }
+        }
+        return null;
+    }
+
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 

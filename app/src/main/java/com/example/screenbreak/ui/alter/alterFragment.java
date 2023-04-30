@@ -62,7 +62,7 @@ public class alterFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // Crea un nuevo adaptador y lo asigna al RecyclerView
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(appUsageTimeList);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(),appUsageTimeList);
         recyclerView.setAdapter(adapter);
 
         return root;
