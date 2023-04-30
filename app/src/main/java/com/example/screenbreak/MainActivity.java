@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         Log.println(Log.INFO, "MainActivity", "Estado del permiso QUERY: " + variable2);
 
         setSupportActionBar(binding.appBarMain.toolbar);
+
+        /*
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        */
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -83,13 +87,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
     }
-
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
+    }*/
+
 
     @Override
     public boolean onSupportNavigateUp() {

@@ -1,5 +1,6 @@
 package com.example.screenbreak.ui.home;
 
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +35,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PieEntry entry = pieEntries.get(position);
-
         holder.textViewAppName.setText(entry.getLabel());
         Log.d("PRUEBA DE NOMBREE", entry.getLabel());
 
