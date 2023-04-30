@@ -1,6 +1,7 @@
 package com.example.screenbreak.ui.home;
 
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         PieEntry entry = pieEntries.get(position);
 
         holder.textViewAppName.setText(entry.getLabel());
+        Log.d("PRUEBA DE NOMBREE", entry.getLabel());
 
         int totalTime = (int) entry.getValue();
         if (totalTime <= 60) {

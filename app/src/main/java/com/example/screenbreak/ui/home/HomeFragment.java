@@ -98,8 +98,7 @@ public class HomeFragment extends Fragment {
             //Log.d("MiApp", Float.toString(totalTime));
             //Log.d("MiApp", appName);
 
-            int appMin = (int) totalPhoneTime;
-
+            int appMin = (int) totalTime;
             pieEntries.add(new PieEntry(appMin, appName));
 
             count++;
@@ -195,7 +194,7 @@ public class HomeFragment extends Fragment {
         List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
         */
 
-        //hoy
+        // Marca un intervalo de tiempo de 24 horas a partir de las 12 am del dia de hoy
         UsageStatsManager usageStatsManager = (UsageStatsManager) requireContext().getSystemService(Context.USAGE_STATS_SERVICE);
         Calendar calendar = Calendar.getInstance();
         long endTime = calendar.getTimeInMillis();
@@ -204,9 +203,12 @@ public class HomeFragment extends Fragment {
         calendar.set(Calendar.SECOND, 0);
         long startTime = calendar.getTimeInMillis();
 
+        //Obtiene los tiempos con el intervalo
         List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
 
         Map<String, Long> appUsageTimeMap = new HashMap<>();
+
+        //Filtra los tiempos solo de las apps que tiene el usuario
         for (UsageStats usageStats : usageStatsList) {
             String packageName = usageStats.getPackageName();
             if (isUserInstalledApp(packageName, userInstalledApps)) {
@@ -258,17 +260,22 @@ public class HomeFragment extends Fragment {
 
 
     public List<ApplicationInfo> getInstalledApps() {
+        // Esta funcion obtiene la lista de apps instaladas por el usuario y filtra las de sistema.
+
         PackageManager packageManager = getContext().getPackageManager();
         List<ApplicationInfo> installedApps = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
         List<ApplicationInfo> userInstalledApps = new ArrayList<>();
 
+        // Filtra las apps del sistema
         for (ApplicationInfo appInfo : installedApps) {
-            // Filter out system apps
+
             if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                 userInstalledApps.add(appInfo);
             }
         }
+
         /*
+        // Imprime la lista final.
         for (ApplicationInfo appInfo : userInstalledApps) {
             Log.d("InstalledApp", "Package name: " + appInfo.packageName);
         }*/
