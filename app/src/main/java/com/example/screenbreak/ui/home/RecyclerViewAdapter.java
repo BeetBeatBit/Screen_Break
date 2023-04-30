@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,12 +40,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         PieEntry entry = pieEntries.get(position);
+
         holder.textViewAppName.setText(entry.getLabel());
         Log.d("PRUEBA DE NOMBREE", entry.getLabel());
 
         String packageName = getPackageName(entry.getLabel());
         Log.d("PRUEBA DEFINITIVA: ", packageName);
+
+        holder.appIcon.setBackground(getAppIconByPackageName(packageName));
 
 
         int totalTime = (int) entry.getValue();
@@ -95,10 +100,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView textViewAppName;
         public TextView textViewAppTime;
 
+        public ImageView appIcon;
+
         public ViewHolder(View itemView) {
             super(itemView);
+
             textViewAppName = itemView.findViewById(R.id.textViewAppName);
             textViewAppTime = itemView.findViewById(R.id.textViewAppTime);
+            appIcon = itemView.findViewById(R.id.icon_id);
         }
     }
     public static class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {

@@ -12,6 +12,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp">
 
+        <ImageView
+            android:id="@+id/icon_id"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_margin="5dp" />
+
         <TextView
             android:id="@+id/textViewAppName"
             android:layout_width="0dp"
