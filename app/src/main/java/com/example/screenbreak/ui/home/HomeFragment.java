@@ -20,6 +20,7 @@ import com.example.screenbreak.UnlockReceiver;
 import com.example.screenbreak.databinding.FragmentHomeBinding;
 
 //Graficas
+import com.example.screenbreak.ui.alter.RecyclerViewAdapter;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -37,7 +38,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.app.usage.UsageStats;
-import android.util.Log;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,7 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
 

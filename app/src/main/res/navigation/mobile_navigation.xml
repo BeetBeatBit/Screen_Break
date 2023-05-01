@@ -15,7 +15,11 @@
         android:id="@+id/nav_gallery"
         android:name="com.example.screenbreak.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_gallery" >
+        <action
+            android:id="@+id/action_nav_gallery_to_Nota1"
+            app:destination="@id/Nota1" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -27,4 +31,12 @@
         android:name="com.example.screenbreak.ui.alter.alterFragment"
         android:label="@string/menu_detalle"
         tools:layout="@layout/fragment_alter" />
+
+    <fragment
+        android:id="@+id/Nota1"
+        android:name="com.example.screenbreak.ui.gallery.Notas.Nota1Fragment"
+        android:label="Nota1"
+        tools:layout="@layout/primera_nota">
+    </fragment>
+
 </navigation>

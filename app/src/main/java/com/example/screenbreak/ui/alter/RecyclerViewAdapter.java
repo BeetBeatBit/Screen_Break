@@ -1,4 +1,4 @@
-package com.example.screenbreak.ui.home;
+package com.example.screenbreak.ui.alter;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
