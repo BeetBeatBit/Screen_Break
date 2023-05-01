@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_nav_gallery_to_Nota1"
             app:destination="@id/Nota1" />
+        <action
+            android:id="@+id/action_nav_gallery_to_Nota2"
+            app:destination="@id/Nota2" />
+        <action
+            android:id="@+id/action_nav_gallery_to_Nota3"
+            app:destination="@id/Nota3" />
     </fragment>
 
     <fragment
@@ -37,6 +43,20 @@
         android:name="com.example.screenbreak.ui.gallery.Notas.Nota1Fragment"
         android:label="Nota1"
         tools:layout="@layout/primera_nota">
+    </fragment>
+
+    <fragment
+        android:id="@+id/Nota2"
+        android:name="com.example.screenbreak.ui.gallery.Notas.Nota2Fragment"
+        android:label="Nota2"
+        tools:layout="@layout/segunda_nota">
+    </fragment>
+
+    <fragment
+        android:id="@+id/Nota3"
+        android:name="com.example.screenbreak.ui.gallery.Notas.Nota3Fragment"
+        android:label="Nota3"
+        tools:layout="@layout/tercera_nota">
     </fragment>
 
 </navigation>

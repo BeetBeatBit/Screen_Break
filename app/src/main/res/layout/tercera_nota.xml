@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="413dp"
+        android:layout_height="233dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/jovenes_movil" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="391dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="El uso excesivo del celular: impacto en la vida cotidiana"
+        android:textColor="@color/purple_500"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="386dp"
+        android:layout_height="403dp"
+        android:layout_marginTop="16dp"
+        android:text="En los últimos años, se ha empezado a prestar más atención al uso excesivo de los dispositivos móviles y a los posibles problemas que esto puede causar en nuestras vidas. Según una encuesta realizada por el INDEC en 2018, el 78,9% de la población argentina usa teléfono celular y el 71% utiliza internet. Esto indica que los dispositivos móviles son herramientas muy utilizadas en la vida cotidiana de los habitantes urbanos.  El celular no solo sirve para comunicarse con otras personas de manera textual o verbal, sino que también es una puerta de acceso a internet, lo que permite a los usuarios tener una gran cantidad de información al alcance de su mano. Aunque los dispositivos móviles han mejorado la comunicación y la productividad en varios sectores, también pueden llevar a una posible dependencia asociada al uso excesivo y persistente del celular, lo que se asemeja al concepto de adicción. Para abordar esta posible problemática, se han investigado variables de personalidad, estilos de uso y autoestima que podrían estar relacionados con la adicción al celular."
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+</androidx.constraintlayout.widget.ConstraintLayout>

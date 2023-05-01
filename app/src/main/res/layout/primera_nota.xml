@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="412dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/celulares"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/celulares" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="378dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="El impacto del teléfono celular en la vida social"
+        android:textColor="@color/purple_500"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="376dp"
+        android:layout_height="393dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:text="El teléfono celular se ha convertido en un objeto omnipresente en nuestra vida social. Es un dispositivo que ha tenido un impacto significativo en las relaciones humanas, el comportamiento público, y nuestra percepción del espacio público y privado. Este dispositivo es adictivo, brinda gran visibilidad, impone modas y es una fuente de identidad para los jóvenes. Para estudiarlo, se requiere de diferentes enfoques científicos que produzcan conocimiento relevante y consistente con las necesidades sociales. Las tecnologías de información y comunicación se adoptan y diseñan en un contexto social, cultural e histórico específico. En México, la frecuencia del uso del celular para enviar mensajes o voz depende en gran medida de las tarifas impuestas por las compañías celulares, y la pobreza patrimonial de los jóvenes ha llevado a las empresas a buscar esquemas de prepago para hacer que el dispositivo sea más accesible."
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 </androidx.constraintlayout.widget.ConstraintLayout>
