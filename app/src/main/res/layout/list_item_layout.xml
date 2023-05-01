@@ -29,10 +29,10 @@
         android:id="@+id/textViewAppTime"
         android:layout_width="261dp"
         android:layout_height="22dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="11dp"
         android:textColor="@color/purple_500"
         android:textSize="14sp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

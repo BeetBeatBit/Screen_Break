@@ -44,10 +44,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         PieEntry entry = pieEntries.get(position);
 
         holder.textViewAppName.setText(entry.getLabel());
-        Log.d("PRUEBA DE NOMBREE", entry.getLabel());
+        //Log.d("PRUEBA DE NOMBREE", entry.getLabel());
 
         String packageName = getPackageName(entry.getLabel());
-        Log.d("PRUEBA DEFINITIVA: ", packageName);
+        //Log.d("PRUEBA DEFINITIVA: ", packageName);
 
         holder.appIcon.setBackground(getAppIconByPackageName(packageName));
 
