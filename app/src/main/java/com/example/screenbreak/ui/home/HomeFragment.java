@@ -178,7 +178,7 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // Se actualiza el valor del TextView cada vez que se muestra el fragmento
-        unlockCountTextView.setText("Hoy has desbloqueado " + unlockReceiver.getUnlockCount() + " Veces tu telefono");
+        unlockCountTextView.setText("Hoy has desbloqueado " + unlockReceiver.getUnlockCount() + " veces tu teléfono");
     }
 
     public List<PieEntry> getTotalTimeYesterdayInMinutes(List<ApplicationInfo> userInstalledApps) {

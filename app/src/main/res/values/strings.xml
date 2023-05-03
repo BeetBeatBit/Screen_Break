@@ -16,9 +16,9 @@
     <string name="Text_Time">Su tiempo del uso total hoy es:</string>
 
     <string name="Nav_Ayuda">Ayuda</string>
-    <string name="Ayuda_text1">¿Adicción al teléfono?</string>
-    <string name="Ayuda_text2">Como mejorar tus hábitos</string>
-    <string name="Ayuda_text3">Elije las apps que te ayudan a producir</string>
+    <string name="Ayuda_text1">Impacto del uso del teléfono</string>
+    <string name="Ayuda_text2">Como impacta tu vida</string>
+    <string name="Ayuda_text3">El negocio de los teléfonos</string>
     <string name="Ayuda_text4">Como mantener la calma</string>
     <string name="Ayuda_text5">Como afecta una pantalla al dormir</string>
 </resources>

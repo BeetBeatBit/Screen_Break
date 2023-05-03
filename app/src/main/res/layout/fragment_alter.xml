@@ -8,11 +8,24 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="325dp"
-        android:layout_height="722dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="375dp"
+        android:layout_height="655dp"
+        android:layout_marginTop="75dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="24dp"
+        android:text="Uso de hoy por aplicación"
+        android:textColor="@color/purple_500"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
